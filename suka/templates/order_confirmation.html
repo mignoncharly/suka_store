@@ -1,0 +1,49 @@
+{# order_confirmation.html #}
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-3 mb-5">
+    <div class="text-center mb-4">
+        <h2 class="mb-3">Merci pour ta commande!</h2>
+        <h3>Confirme ta commande en cliquant sur le lien ci-dessous</h3>
+        <p class="text-muted">Order #{{ order.id }}</p>
+    </div>
+
+    <!-- Order Details -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="order-details border p-3 rounded mb-4 bg-light">
+                <h4 class="mb-3">Détails de ta commande</h4>
+                {% for item in order.orderitem_set.all %}
+                <div class="d-flex justify-content-between">
+                    <p>{{ item.product.name }} x {{ item.quantity }}</p>
+                    <p>{{ item.total_price }} Fcfa</p>
+                </div>
+                {% endfor %}
+                <hr>
+                <h4 class="text-end">Total: <strong>{{ order.total }} Fcfa</strong></h4>
+            </div>
+        </div>
+        
+        <!-- Shipping Information -->
+        <div class="col-md-6">
+            <div class="shipping-info border p-3 rounded mb-4 bg-white">
+                <h4 class="mb-3">Informations de Livraison</h4>
+                <p><strong>Nom:</strong> {{ order.customer_name }}</p>
+                <p><strong>Téléphone:</strong> {{ order.customer_phone }}</p>
+                <p><strong>Adresse:</strong> {{ order.shipping_address }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation and Continue Buttons -->
+    <div class="text-center mt-4">
+        <a href="{{ whatsapp_url }}" class="btn btn-success btn-lg me-2" target="_blank">
+            Confirme via WhatsApp
+        </a>
+        <a href="{% url 'home' %}" class="btn btn-outline-primary btn-lg">
+            Retour à l'accueil
+        </a>
+    </div>
+</div>
+{% endblock %}

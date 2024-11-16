@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-3 mb-5">
+    <h2 class="text-center mb-3">Bienvenue chez Sûka !</h2>
+    <h3 class="text-center mb-4">Les cookies les plus gourmands de Yaoundé.</h3>
+    
+    <!-- Search and Category Filter -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <!-- Category Filter -->
+        <div class="d-flex align-items-center">
+            <label for="category" class="me-2 fw-bold">Filtrer par catégorie:</label>
+            <select id="category" class="form-select w-auto" style="height: 2.4rem;" onchange="window.location.href='/?category=' + encodeURIComponent(this.value);">
+                <option value="">All</option>
+                {% for category in categories %}
+                    <option value="{{ category.name }}" {% if request.GET.category == category.name %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <!-- Search Field -->
+        <form method="get" action="" class="d-flex w-75">
+            <input type="text" name="search" class="form-control me-2" placeholder="Rechercher un produit..." value="{{ request.GET.search }}">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
+        
+    </div>
+
+    <!-- Product Grid -->
+    <div class="row g-4">
+        {% for product in products %}
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 text-center">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                        <p class="card-text text-muted fw-bold">{{ product.price }} Fcfa</p>
+                        <a href="#" class="btn btn-primary w-100" onclick="addToCart('{{ product.id }}'); return false;">Ajouter au panier</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">Pas de produits valables pour cette catégorie ou recherche.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Notification container -->
+<div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+
+{% endblock %}

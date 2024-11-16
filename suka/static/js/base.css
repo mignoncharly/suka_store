@@ -1,0 +1,20 @@
+/* styles.css */
+body {
+    background-image: url('{% static "img/cookiebg.jpg" %}');
+    background-size: cover; /* Ensures the image covers the full screen */
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps the background fixed on scroll */
+    background-position: center;
+}
+
+/* Overlay with opacity to prevent content from being hidden */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7); /* White overlay with 70% opacity */
+    z-index: -1; /* Keeps it behind all other elements */
+}

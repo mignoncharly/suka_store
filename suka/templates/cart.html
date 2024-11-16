@@ -1,0 +1,58 @@
+{# cart.html #}
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container mt-3 mb-5">
+    <h2 class="mb-4">Shopping Cart</h2>
+    {% if cart_items %}
+        <div class="cart-items">
+            {% for item in cart_items %}
+            <div class="cart-item row align-items-center mb-4" id="cart-item-{{ item.id }}">
+                <div class="col-md-2">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
+                </div>
+                <div class="col-md-4">
+                    <h5>{{ item.product.name }}</h5>
+                    <p class="text-muted">Price: {{ item.product.price }} Fcfa</p>
+                </div>
+                <div class="col-md-3">
+                    <div class="quantity-controls">
+                        <input type="number"
+                               value="{{ item.quantity }}"
+                               min="1"
+                               class="form-control text-center"
+                               style="max-width: 80px; margin: 0 auto;"
+                               onchange="updateQuantity('{{ item.id }}', this.value)">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <p class="mb-0">Sous-total: <span id="item-total-{{ item.id }}">{{ item.total_price }}</span> Fcfa</p>
+                </div>
+                <div class="col-md-1 text-end">
+                    <button class="btn btn-danger" onclick="deleteItem('{{ item.id }}')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="cart-summary text-end mt-4">
+            <h4>Total du panier: <span id="cart-total">{{ cart.get_total }}</span> Fcfa</h4>
+            <form action="{% url 'checkout' %}" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success btn-lg mt-3">Procéder au paiement</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Votre panier est vide.
+        </div>
+        <a href="{% url 'home' %}" class="btn btn-primary">Poursuivre les achats</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}
